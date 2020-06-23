@@ -74,6 +74,39 @@ bool gauss (  double ** AB, double * X )
     return true;
 }
 
+void testGauss(){
+    double **AB, *X;
+    int      n, i, j;
+
+    cout << setprecision ( 4 ) << fixed;
+
+    // odczytujemy liczbę niewiadomych
+
+    cin >> n;
+
+    // tworzymy macierze AB i X
+
+    AB = new double * [ n ];
+    X  = new double [ n ];
+
+    for( i = 0; i < n; i++ ) AB [ i ] = new double [ n + 1 ];
+
+    // odczytujemy dane dla macierzy AB
+
+    for( i = 0; i < n; i++ )
+        for( j = 0; j <= n; j++ ) cin >> AB [ i ][ j ];
+
+    if( gauss ( n, AB, X ) )
+    {
+        for( i = 0; i < n; i++ )
+            cout << "x" << i + 1 << " = " << setw ( 9 ) << X [ i ]
+                 << endl;
+    }
+    else
+        cout << "DZIELNIK ZERO\n";
+
+}
+
 int main() {
     clock_t start = clock();
     printf("%llu\n", AckermanFunction(3,13));

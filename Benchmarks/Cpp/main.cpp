@@ -10,6 +10,8 @@
 
 using  namespace std;
 using namespace std::chrono;
+
+const int TEST_REPEAT = 100;
 unsigned  long long int AckermanFunction(unsigned  long long int m, unsigned  long long int n){
     if (m == 0)
         return (n+1);
@@ -19,7 +21,6 @@ unsigned  long long int AckermanFunction(unsigned  long long int m, unsigned  lo
         return AckermanFunction(m - 1, AckermanFunction(m, n - 1));
     return n;
 }
-
 long long unsigned int FibonacciSequence(int n){
     if (n == 0 ) return 0;
     if (n == 1) return  1;
@@ -94,47 +95,48 @@ void testGauss(int testNumber){
                     15648, 235489, 546879, 564898, 302156, 486897, 38879, 68795, 13248, 65489, 16879};
 
     for (int test = 0; test<testNumber; test++){
-
-
-        double **AB, *X;
-        int      n = 10, i, j;
-
-        // tworzymy macierze AB i X
-
-        AB = new double * [ n ];
-        X  = new double [ n ];
-
-
-
-        for( i = 0; i < n; i++ ) AB [ i ] = new double [ n + 1 ];
-
-        // odczytujemy dane dla macierzy AB
-        int k = 0;
-        for( i = 0; i < n; i++ )
-            for( j = 0; j <= n; j++ )
-            {   AB[i][j] = values[k];
-                k++;
-            }
-        auto start_time = std::chrono::high_resolution_clock::now();
-
         clock_t start = clock();
-        bool result = gauss ( n, AB, X );
-        clock_t end = clock();
-        auto end_time = std::chrono::high_resolution_clock::now();
-        if(  result)
-        {
-            for( i = 0; i < n; i++ )
-                cout << "x" << i + 1 << " = " << setw ( 9 ) << X [ i ]
-                     << endl;
-        }
-        else
-            cout << "DZIELNIK ZERO\n";
+        for(int it = 0; it < 10000; it++) {
 
-//        float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
-    float elapsedTime = (end_time - start_time)/std::chrono::nanoseconds (1);
-        if(elapsedTime < minTime)
+            double **AB, *X;
+            int n = 10, i, j;
+
+            // tworzymy macierze AB i X
+
+            AB = new double *[n];
+            X = new double[n];
+
+
+            for (i = 0; i < n; i++) AB[i] = new double[n + 1];
+
+            // odczytujemy dane dla macierzy AB
+            int k = 0;
+            for (i = 0; i < n; i++)
+                for (j = 0; j <= n; j++) {
+                    AB[i][j] = values[k];
+                    k++;
+                }
+//            auto start_time = std::chrono::high_resolution_clock::now();
+
+
+            bool result = gauss(n, AB, X);
+            delete AB;
+            delete X;
+//            auto end_time = std::chrono::high_resolution_clock::now();
+//            if (result) {
+//                for (i = 0; i < n; i++)
+//                    cout << "x" << i + 1 << " = " << setw(9) << X[i]
+//                         << endl;
+//            } else
+//                cout << "DZIELNIK ZERO\n";
+
+        }
+        clock_t end = clock();
+        float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
+//            float elapsedTime = (end_time - start_time) / std::chrono::nanoseconds(1);
+        if (elapsedTime < minTime)
             minTime = elapsedTime;
-        if(elapsedTime > maxTime)
+        if (elapsedTime > maxTime)
             maxTime = elapsedTime;
         sum += elapsedTime;
     }
@@ -149,7 +151,9 @@ void testAckerman(int testNumber){
     float minTime = 100, maxTime= 0, sum = 0;
     for (int i = 0; i<testNumber; i++){
         clock_t start = clock();
-    printf("%llu\n", AckermanFunction(3,8));
+        for(int it=0; it< TEST_REPEAT; it++){
+            AckermanFunction(3,8);
+        }
     clock_t end = clock();
     float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
     if(elapsedTime < minTime)
@@ -167,7 +171,9 @@ void testFibonacci(int testNumber){
     float minTime = 100, maxTime= 0, sum = 0;
     for (int i = 0; i<testNumber; i++){
         clock_t start = clock();
-        printf("%llu\n", FibonacciSequence(15));
+        for(int it=0; it< 100000; it++){
+            FibonacciSequence(70);
+        }
         clock_t end = clock();
         float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
         if(elapsedTime < minTime)
@@ -186,7 +192,10 @@ void testEratosthenes(int testNumber){
     float minTime = 100, maxTime= 0, sum = 0;
     for (int i = 0; i<testNumber; i++){
         clock_t start = clock();
-        SieveOfEratosthenes(1000000);
+        for(int it=0; it< 10; it++){
+            SieveOfEratosthenes(1000000);
+        }
+
         clock_t end = clock();
         float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
         if(elapsedTime < minTime)
@@ -207,5 +216,6 @@ int main() {
     testEratosthenes(20);
     testAckerman(20);
     testFibonacci(20);
+    testGauss(20);
     return 0;
 }
