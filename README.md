@@ -73,4 +73,5 @@ javac SourceCode.java
 java -jar bytecoder-cli-2020-05-15-executable.jar -classpath=. -mainclass=mypackage.SomeClass -builddirectory=. -backend=js -minify=false
 ```
 Please note that **mypackage.SomeClass** has to include main() method.
+
 3. Run your web server (index.html template to run Java compiled code is included in my repo)
