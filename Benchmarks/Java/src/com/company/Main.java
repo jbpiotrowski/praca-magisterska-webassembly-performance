@@ -1,9 +1,6 @@
 package com.company;
 
 
-import java.io.Console;
-import java.time.Clock;
-
 public class Main {
     public static int AckermanFunction(int m, int n){
         if(m == 0)
@@ -87,7 +84,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
-
+    System.out.println("Testing WASM");
     }
 }
