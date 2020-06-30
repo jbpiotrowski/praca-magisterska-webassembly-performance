@@ -67,6 +67,60 @@ function gauss (n, AB,  X )
     return true;
 }
 
+function partition(array, low, high)
+{
+    var x = array[low];
+    var i = low, j = high, w;
+    while (true)
+    {
+        while (array[j] > x)
+            j--;
+        while (array[i] < x)
+            i++;
+        if (i < j)
+        {
+            w = array[i];
+            array[i] = array[j];
+            array[j] = w;
+            i++;
+            j--;
+        }
+        else
+            return j;
+    }
+}
+
+function quickSort(array, low, high)
+{
+    var pivot;
+    if (low < high)
+    {
+        pivot = partition(array, low, high);
+        quickSort(array, low, pivot);
+        quickSort(array, pivot + 1, high);
+    }
+}
+
+
+function customTestMethod(){
+    var moduloNumber = 867;
+    var sum = 0;
+    var array_length = 1000000;
+    var innerLoopBound = 100000;
+    var array = new Array(array_length);
+
+    for (var index = 0; index < array_length; index++)
+        array[index] = index % moduloNumber;
+
+    for (var iteration = 0; iteration < 100; iteration++)
+        for (var innerloop = 0; innerloop < innerLoopBound; innerloop++)
+            sum += array[(iteration + innerloop) % array_length];
+    console.log(`sum ${sum}`);
+    quickSort(array, 0, array_length - 1);
+    
+    array = 0;
+}
+
 function testAckerman(testNumber){
     var minTime = 100, maxTime= 0, sum = 0;
     for (var i = 0; i<testNumber; i++){
@@ -186,7 +240,8 @@ function testGauss(testNumber){
 }
 
 
-testEratosthenes(20);
-testAckerman(20);
-testFibonacci(20);
-testGauss(20);
+// testEratosthenes(20);
+// testAckerman(20);
+// testFibonacci(20);
+// testGauss(20);
+customTestMethod();
