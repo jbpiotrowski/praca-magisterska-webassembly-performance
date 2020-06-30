@@ -29,38 +29,26 @@ namespace Main
         }
         public static void SieveOfEratosthenes(int n)
         {
-            // Create a boolean array "prime[0..n]" and initialize
-            // all entries it as true. A value in prime[i] will
-            // finally be false if i is Not a prime, else true.
             var prime = new bool[n+1];
             for(int i=0;i<n;i++)
                 prime[i] = true;
 
             for(int p = 2; p*p <=n; p++)
             {
-                // If prime[p] is not changed, then it is a prime
                 if(prime[p])
                 {
-                    // Update all multiples of p
                     for(int i = p*p; i <= n; i += p)
                         prime[i] = false;
                 }
             }
-
-            // Print all prime numbers
-            for(int i = 2; i <= n; i++)
-            {
-                if(prime[i])
-                    Console.WriteLine(i + " ");
-            }
+            
         }
-        public bool gauss (double[][] ab, double[] x)
+        public bool Gauss (double[][] ab, double[] x)
         {
-            const double eps = 1e-12; // stała przybliżenia zera
+            const double eps = 1e-12; 
             int i, j, k, n = 5;
             double m, s;
-
-            // eliminacja współczynników
+            
             for( i = 0; i < n - 1; i++ )
             {
                 for( j = i + 1; j < n; j++ )
@@ -71,7 +59,6 @@ namespace Main
                         ab [ j ][ k ] += m * ab [ i ][ k ];
                 }
             }
-            // wyliczanie niewiadomych
 
             for( i = n - 1; i >= 0; i-- )
             {
@@ -83,9 +70,63 @@ namespace Main
             }
             return true;
         }
+        
+        public static int Partition(int[] array, int low, int high)
+        {
+            var x = array[low];
+            int i = low, j = high, w;
+            while (true)
+            {
+                while (array[j] > x)
+                    j--;
+                while (array[i] < x)
+                    i++;
+                if (i < j)
+                {
+                    w = array[i];
+                    array[i] = array[j];
+                    array[j] = w;
+                    i++;
+                    j--;
+                }
+                else
+                    return j;
+            }
+        }
+
+        public static void QuickSort(int[] array, int low, int high)
+        {
+            int pivot;
+            if (low < high)
+            {
+                pivot = Partition(array, low, high);
+                QuickSort(array, low, pivot);
+                QuickSort(array, pivot + 1, high);
+            }
+        }
+
+
+        public static void CustomTestMethod(){
+            int moduloNumber = 867;
+            double sum = 0;
+            int array_length = 1000000;
+            int innerLoopBound = 100000;
+            var array = new int[array_length];
+
+            for (int index = 0; index < array_length; index++)
+                array[index] = index % moduloNumber;
+
+            for (int iteration = 0; iteration < 100; iteration++)
+            for (int innerloop = 0; innerloop < innerLoopBound; innerloop++)
+                sum += array[(iteration + innerloop) % array_length];
+            Console.WriteLine("sum " + sum);
+            QuickSort(array, 0, array_length - 1);
+
+            array = null;
+        }
         public static void Main()
         {
-           Console.WriteLine(AckermanFunction(3,4));
+           CustomTestMethod();
         }
     }
 }
