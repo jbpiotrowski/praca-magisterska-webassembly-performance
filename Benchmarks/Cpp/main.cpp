@@ -2,14 +2,10 @@
 
 #include <ctime>
 #include <cstring>
-//#include <windows.h>
 #include <cmath>
-#include <iomanip>
 #include <iostream>
-#include <chrono>
 
 using  namespace std;
-using namespace std::chrono;
 
 const int TEST_REPEAT = 100;
 unsigned  long long int AckermanFunction(unsigned  long long int m, unsigned  long long int n){
@@ -47,9 +43,6 @@ void SieveOfEratosthenes(long long unsigned int n)
                 prime[i] = false;
         }
     }
-//    for (int p=2; p<=n; p++)
-//        if (prime[p])
-//            printf("%d ", p);
 }
 bool gauss (int n,  double ** AB, double * X )
 {
@@ -79,6 +72,59 @@ bool gauss (int n,  double ** AB, double * X )
         X [ i ] = s / AB [ i ][ i ];
     }
     return true;
+}
+int partition(int array[], int low, int high)
+{
+    int x = array[low];
+    int i = low, j = high, w;
+    while (true)
+    {
+        while (array[j] > x)
+            j--;
+        while (array[i] < x)
+            i++;
+        if (i < j)
+        {
+            w = array[i];
+            array[i] = array[j];
+            array[j] = w;
+            i++;
+            j--;
+        }
+        else
+            return j;
+    }
+}
+
+void quickSort(int *array, int low, int high)
+{
+    int pivot;
+    if (low < high)
+    {
+        pivot = partition(array, low, high);
+        quickSort(array, low, pivot);
+        quickSort(array, pivot + 1, high);
+    }
+}
+
+
+void customTestMethod(){
+    int moduloNumber = 867;
+    double sum = 0;
+    int array_length = 1000000;
+    int innerLoopBound = 100000;
+    auto array = new int[array_length];
+
+    for (int index = 0; index < array_length; index++)
+        array[index] = index % moduloNumber;
+
+    for (int iteration = 0; iteration < 100; iteration++)
+        for (int innerloop = 0; innerloop < innerLoopBound; innerloop++)
+            sum += array[(iteration + innerloop) % array_length];
+    cout << "sum " << sum << endl;
+    quickSort(array, 0, array_length - 1);
+    delete[] array;
+    array = nullptr;
 }
 
 void testGauss(int testNumber){
@@ -116,24 +162,14 @@ void testGauss(int testNumber){
                     AB[i][j] = values[k];
                     k++;
                 }
-//            auto start_time = std::chrono::high_resolution_clock::now();
 
 
             bool result = gauss(n, AB, X);
             delete AB;
             delete X;
-//            auto end_time = std::chrono::high_resolution_clock::now();
-//            if (result) {
-//                for (i = 0; i < n; i++)
-//                    cout << "x" << i + 1 << " = " << setw(9) << X[i]
-//                         << endl;
-//            } else
-//                cout << "DZIELNIK ZERO\n";
-
         }
         clock_t end = clock();
         float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
-//            float elapsedTime = (end_time - start_time) / std::chrono::nanoseconds(1);
         if (elapsedTime < minTime)
             minTime = elapsedTime;
         if (elapsedTime > maxTime)
@@ -213,9 +249,10 @@ void testEratosthenes(int testNumber){
 
 
 int main() {
-    testEratosthenes(20);
-    testAckerman(20);
-    testFibonacci(20);
-    testGauss(20);
+//    testEratosthenes(20);
+//    testAckerman(20);
+//    testFibonacci(20);
+//    testGauss(20);
+customTestMethod();
     return 0;
 }
