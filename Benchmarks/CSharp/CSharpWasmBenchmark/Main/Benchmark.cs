@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Main
 {
     public class Benchmark
     {
-    
+
+        private const int TestRepeat = 500;
         public static int AckermanFunction(int m, int n){
             if(m == 0)
                 return n+1;
@@ -43,10 +45,10 @@ namespace Main
             }
             
         }
-        public bool Gauss (double[][] ab, double[] x)
+        public bool Gauss (int n, double[][] ab, double[] x)
         {
             const double eps = 1e-12; 
-            int i, j, k, n = 5;
+            int i, j, k;
             double m, s;
             
             for( i = 0; i < n - 1; i++ )
@@ -106,7 +108,7 @@ namespace Main
         }
 
 
-        public static void CustomTestMethod(){
+        public static void CustomMethod(){
             int moduloNumber = 867;
             double sum = 0;
             int array_length = 1000000;
@@ -124,9 +126,160 @@ namespace Main
 
             array = null;
         }
+
+        public void TestCustomMethod(int testNumber)
+        {
+            float minTime = 100, maxTime= 0, sum = 0;
+            var stopWatch = new Stopwatch();
+            for (int i = 0; i<testNumber; i++){
+                stopWatch.Start();
+                for(int it=0; it< TestRepeat; it++){
+                    CustomMethod();
+                }
+                stopWatch.Stop();
+                float elapsedTime = stopWatch.ElapsedMilliseconds;
+                if(elapsedTime < minTime)
+                    minTime = elapsedTime;
+                if(elapsedTime > maxTime)
+                    maxTime = elapsedTime;
+                sum += elapsedTime;
+                stopWatch.Reset();
+            }
+
+            Console.WriteLine($"Custom method mean: {sum/testNumber}");
+            Console.WriteLine($"Custom method max: {maxTime}");
+            Console.WriteLine($"Custom method min: {minTime}");
+        }
+        public void testGauss(int testNumber){
+            float minTime = 100, maxTime= 0, sum = 0;
+            int[] values = {8,37, 26, 87, 13, 9, 18, 67, 99, 101, 33,
+                15, 77, 93, 13, 51, 16, 477, 501, 613, 718, 413,
+                18, 111, 135, 187, 15, 313, 314, 1001, 1120, 813, 1013,
+                89, 234, 153, 100, 73, 67, 1300, 1402, 1513, 1478, 1069,
+                372, 147, 169, 293, 14, 156, 777, 813, 616, 341, 2013,
+                141, 278, 347, 847, 613, 178, 993, 3014, 205, 947, 323,
+                4017, 7314, 7891, 5661, 3017, 11024, 8751, 9931, 14759, 64789, 648,
+                60781, 7015, 3017, 9781, 24431, 31586, 8589, 13589, 45895, 84621, 5489,
+                51684, 12354, 12387, 64898, 13325, 14798, 15435, 87982, 14898, 36548, 51687,
+                15648, 235489, 546879, 564898, 302156, 486897, 38879, 68795, 13248, 65489, 16879};
+            var stopWatch = new Stopwatch();
+            for (int test = 0; test<testNumber; test++){
+                
+                stopWatch.Start();
+                for(int it = 0; it < 10000; it++)
+                {
+                    
+                    int n = 10;
+
+                    // tworzymy macierze AB i X
+
+                    var AB = new double [n][];
+                    var X = new double[n];
+
+
+                    for (var i = 0; i < n; i++) AB[i] = new double[n + 1];
+
+                    // odczytujemy dane dla macierzy AB
+                    int k = 0;
+                    for (var i = 0; i < n; i++)
+                    for (var j = 0; j <= n; j++) {
+                        AB[i][j] = values[k];
+                        k++;
+                    }
+
+
+                    bool result = Gauss(n, AB, X);
+                    
+                }
+                stopWatch.Stop();
+                float elapsedTime = stopWatch.ElapsedMilliseconds;
+                if (elapsedTime < minTime)
+                    minTime = elapsedTime;
+                if (elapsedTime > maxTime)
+                    maxTime = elapsedTime;
+                sum += elapsedTime;
+                stopWatch.Reset();
+            }
+
+            Console.WriteLine($"Gauss mean: {sum/testNumber}");
+            Console.WriteLine($"Gauss max: {maxTime}");
+            Console.WriteLine($"Gauss min: {minTime}");
+
+        }
+        
+        void TestAckerman(int testNumber){
+            float minTime = 100, maxTime= 0, sum = 0;
+            var stopWatch = new Stopwatch();
+            for (int i = 0; i<testNumber; i++){
+                stopWatch.Start();
+                for(int it=0; it< TestRepeat; it++){
+                    AckermanFunction(3,8);
+                }
+                stopWatch.Stop();
+                float elapsedTime = stopWatch.ElapsedMilliseconds;
+                if(elapsedTime < minTime)
+                    minTime = elapsedTime;
+                if(elapsedTime > maxTime)
+                    maxTime = elapsedTime;
+                sum += elapsedTime;
+                stopWatch.Reset();
+            }
+
+            Console.WriteLine($"Ackerman mean: {sum/testNumber}");
+            Console.WriteLine($"Ackerman max: {maxTime}");
+            Console.WriteLine($"Ackerman min: {minTime}");
+        }
+        
+        void TestFibonacci(int testNumber){
+            float minTime = 100, maxTime= 0, sum = 0;
+            var stopwatch = new Stopwatch();
+            for (int i = 0; i<testNumber; i++){
+                stopwatch.Start();
+                for(int it=0; it< 100000; it++){
+                    FibonacciSequence(70);
+                }
+                stopwatch.Stop();
+                float elapsedTime = stopwatch.ElapsedMilliseconds;
+                if(elapsedTime < minTime)
+                    minTime = elapsedTime;
+                if(elapsedTime > maxTime)
+                    maxTime = elapsedTime;
+                sum += elapsedTime;
+                stopwatch.Reset();
+            }
+
+            Console.WriteLine($"Fibonacci mean: {sum/testNumber}");
+            Console.WriteLine($"Fibonacci max: {maxTime}");
+            Console.WriteLine($"Fibonacci min: {minTime}");
+        }
+
+        
+        void TestEratosthenes(int testNumber){
+            float minTime = 100, maxTime= 0, sum = 0;
+            var stopWatch = new Stopwatch();
+            for (int i = 0; i<testNumber; i++){
+                stopWatch.Start();
+                for(int it=0; it< 10; it++){
+                    SieveOfEratosthenes(1000000);
+                }
+
+                stopWatch.Stop();
+                float elapsedTime = stopWatch.ElapsedMilliseconds;
+                if(elapsedTime < minTime)
+                    minTime = elapsedTime;
+                if(elapsedTime > maxTime)
+                    maxTime = elapsedTime;
+                sum += elapsedTime;
+                stopWatch.Reset();
+            }
+
+            Console.WriteLine($"Eratosthenes mean: {sum/testNumber}");
+            Console.WriteLine($"Eratosthenes max: {maxTime}");
+            Console.WriteLine($"Eratosthenes min: {minTime}");
+        }
         public static void Main()
         {
-           CustomTestMethod();
+           CustomMethod();
         }
     }
 }
