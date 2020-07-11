@@ -108,7 +108,7 @@ void quickSort(int *array, int low, int high)
 }
 
 
-void customTestMethod(){
+void customMethod(){
     int moduloNumber = 867;
     double sum = 0;
     int array_length = 1000000;
@@ -125,6 +125,27 @@ void customTestMethod(){
     quickSort(array, 0, array_length - 1);
     delete[] array;
     array = nullptr;
+}
+
+void testCustomMethod(int testNumber){
+    float minTime = 100, maxTime= 0, sum = 0;
+    for (int i = 0; i<testNumber; i++){
+        clock_t start = clock();
+        for(int it=0; it< TEST_REPEAT; it++){
+            customMethod();
+        }
+        clock_t end = clock();
+        float elapsedTime =(float)(end - start) / CLOCKS_PER_SEC;
+        if(elapsedTime < minTime)
+            minTime = elapsedTime;
+        if(elapsedTime > maxTime)
+            maxTime = elapsedTime;
+        sum += elapsedTime;
+    }
+
+    cout<<"Custom method mean: "<<sum/testNumber<<endl;
+    cout<<"Custom method max: "<<maxTime<<endl;
+    cout<<"Custom method min: "<<minTime<<endl;
 }
 
 void testGauss(int testNumber){
@@ -253,6 +274,6 @@ int main() {
 //    testAckerman(20);
 //    testFibonacci(20);
 //    testGauss(20);
-customTestMethod();
+    customMethod();
     return 0;
 }
