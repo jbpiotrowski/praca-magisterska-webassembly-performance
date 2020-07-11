@@ -1,6 +1,6 @@
 # praca-magisterska-webassembly-performance
 
-This readme includes information about setting up tools for compiling to WASM. A web server will be required for every scenario, for example [Python web server](https://docs.python.org/3/library/http.server.html).
+This readme includes information about setting up tools for compiling several languages (C++, C#, Java) to WASM. A web server will be required for every scenario, for example [Python web server](https://docs.python.org/3/library/http.server.html).
 ## C++/C to WASM
 
 Compilation of C++/C files is pretty straightforward with official WASM compiler provided by [Emscripten](https://developer.mozilla.org/en-US/docs/WebAssembly/C_to_wasm).
