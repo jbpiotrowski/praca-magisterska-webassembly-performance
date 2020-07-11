@@ -1,3 +1,5 @@
+const { PerformanceObserver, performance } = require('perf_hooks');
+
 function AckermanFunction(m, n){
     if (m == 0)
         return (n+1);
@@ -102,7 +104,7 @@ function quickSort(array, low, high)
 }
 
 
-function customTestMethod(){
+function customMethod(){
     var moduloNumber = 867;
     var sum = 0;
     var array_length = 1000000;
@@ -121,14 +123,14 @@ function customTestMethod(){
     array = 0;
 }
 
-function testAckerman(testNumber){
+function testCustomMethod(testNumber){
     var minTime = 100, maxTime= 0, sum = 0;
     for (var i = 0; i<testNumber; i++){
-        var start = new Date();
+        var start = performance.now();
         for(var it = 0; it< 100; it++){
-            AckermanFunction(3,8);
+            customMethod();
         }
-    var end = new Date();
+    var end = performance.now();
     var elapsedTime =(end - start);
     if(elapsedTime < minTime)
         minTime = elapsedTime;
@@ -137,19 +139,40 @@ function testAckerman(testNumber){
     sum += elapsedTime;
     }
 
-    console.log("Ackerman mean: " + (sum/testNumber)/1000)
-    console.log("Ackerman max: " +(maxTime)/1000)
-    console.log("Ackerman min: "+(minTime)/1000)
+    console.log("Custom method mean: " + (sum/testNumber))
+    console.log("Custom method max: " +(maxTime))
+    console.log("Custom method min: "+(minTime))
+}
+
+function testAckerman(testNumber){
+    var minTime = 100, maxTime= 0, sum = 0;
+    for (var i = 0; i<testNumber; i++){
+        var start = performance.now();
+        for(var it = 0; it< 100; it++){
+            AckermanFunction(3,8);
+        }
+    var end = performance.now();
+    var elapsedTime =(end - start);
+    if(elapsedTime < minTime)
+        minTime = elapsedTime;
+    if(elapsedTime > maxTime)
+        maxTime = elapsedTime;
+    sum += elapsedTime;
+    }
+
+    console.log("Ackerman mean: " + (sum/testNumber))
+    console.log("Ackerman max: " +(maxTime))
+    console.log("Ackerman min: "+(minTime))
 }
 function testFibonacci(testNumber){
     var minTime = 100, maxTime= 0, sum = 0;
     for (var i = 0; i<testNumber; i++){
-        var start = new Date();
+        var start = performance.now();
         for(var it = 0; it< 100000; it++){
             FibonacciSequence(70);
         }
          
-        var  end = new Date();
+        var  end = performance.now();
         var  elapsedTime =(end - start);
         if(elapsedTime < minTime)
             minTime = elapsedTime;
@@ -158,19 +181,19 @@ function testFibonacci(testNumber){
         sum += elapsedTime;
     }
 
-    console.log("Fibonacci mean: " + (sum/testNumber)/1000)
-    console.log("Fibonacci max: " +(maxTime)/1000)
-    console.log("Fibonacci min: "+(minTime)/1000)
+    console.log("Fibonacci mean: " + (sum/testNumber))
+    console.log("Fibonacci max: " +(maxTime))
+    console.log("Fibonacci min: "+(minTime))
 }
 
 function testEratosthenes( testNumber){
     var minTime = 100, maxTime= 0, sum = 0;
     for (var i = 0; i<testNumber; i++){
-        var start = new Date();
+        var start = performance.now();
         for(var it = 0; it< 10; it++){
             SieveOfEratosthenes(1000000);
         }
-        var end = new Date();
+        var end = performance.now();
         var elapsedTime =(end - start);
         if(elapsedTime < minTime)
             minTime = elapsedTime;
@@ -179,9 +202,9 @@ function testEratosthenes( testNumber){
         sum += elapsedTime;
     }
 
-    console.log("Eratosthenes mean: " + (sum/testNumber)/1000)
-    console.log("Eratosthenes max: " +(maxTime)/1000)
-    console.log("Eratosthenes min: "+(minTime)/1000)
+    console.log("Eratosthenes mean: " + (sum/testNumber))
+    console.log("Eratosthenes max: " +(maxTime))
+    console.log("Eratosthenes min: "+(minTime))
 }
 
 function testGauss(testNumber){
@@ -198,50 +221,36 @@ function testGauss(testNumber){
                     [15648, 235489, 546879, 564898, 302156, 486897, 38879, 68795, 13248, 65489, 16879]];
 
     for (var test = 0; test<testNumber; test++){
-        var start = new Date();
+        var start = performance.now();
         for(var it = 0; it < 10000; it++) {
 
             var AB =[], X=[];
             var n = 10, i, j;
-
-            // for (i = 0; i < n; i++) AB[i] = new double[n + 1];
-
-            // odczytujemy dane dla macierzy AB
+         
             var k = 0;
             for (i = 0; i < n; i++)                
                 AB.push(values[i])                    
                 
-//            auto start_time = std::chrono::high_resolution_clock::now();
-
-
             var result = gauss(n, AB, X);
 
-//            auto end_time = std::chrono::high_resolution_clock::now();
-//            if (result) {
-//                for (i = 0; i < n; i++)
-//                    cout << "x" << i + 1 << " = " << setw(9) << X[i]
-//                         << endl;
-//            } else
-//                cout << "DZIELNIK ZERO\n";
-
         }
-        var end = new Date();
+        var end = performance.now();
         var elapsedTime =(end - start);
-//            float elapsedTime = (end_time - start_time) / std::chrono::nanoseconds(1);
+
         if (elapsedTime < minTime)
             minTime = elapsedTime;
         if (elapsedTime > maxTime)
             maxTime = elapsedTime;
         sum += elapsedTime;
     }
-    console.log("Gauss mean: " + (sum/testNumber)/1000)
-    console.log("Gauss max: " +(maxTime)/1000)
-    console.log("Gauss min: "+(minTime)/1000)
+    console.log("Gauss mean: " + (sum/testNumber))
+    console.log("Gauss max: " +(maxTime))
+    console.log("Gauss min: "+(minTime))
 }
 
 
-// testEratosthenes(20);
+testEratosthenes(20);
 // testAckerman(20);
 // testFibonacci(20);
 // testGauss(20);
-customTestMethod();
+// customTestMethod();
