@@ -1,8 +1,9 @@
 package com.company;
 
+;
 
 public class Main {
-    final int TestRepeat = 500;
+
     public static int AckermanFunction(int m, int n){
         if(m == 0)
             return n+1;
@@ -25,7 +26,7 @@ public class Main {
         }
         return b;
     }
-    public static void sieveOfEratosthenes(int n)
+    public static int sieveOfEratosthenes(int n)
     {
         boolean[] prime = new boolean[n+1];
         for(int i=0;i<n;i++)
@@ -39,12 +40,18 @@ public class Main {
                     prime[i] = false;
             }
         }
+        int primeNumbersCount = 0;
+            for (int i = 2; i< n + 1; i++){
+                if(prime[i])
+                    primeNumbersCount++;
+            }        
+        return primeNumbersCount;
     }
 
 
     public static boolean gauss (int n, double[][] AB, double[] X)
     {
-     final double eps = 1e-12;
+        final double eps = 1e-12;
         int i, j, k;
         double m, s;
 
@@ -106,52 +113,39 @@ public class Main {
     }
 
 
-    public static void CustomMethod(){
+    public static long CustomMethod(){
         int moduloNumber = 867;
-        double sum = 0;
+        long sum = 0;
         int array_length = 1000000;
         int innerLoopBound = 100000;
         var array = new int[array_length];
 
         for (int index = 0; index < array_length; index++)
             array[index] = index % moduloNumber;
-
+        quickSort(array, 0, array_length - 1);
         for (int iteration = 0; iteration < 100; iteration++)
             for (int innerloop = 0; innerloop < innerLoopBound; innerloop++)
-                sum += array[(iteration + innerloop) % array_length];
-        System.out.println("sum " + sum);
-        quickSort(array, 0, array_length - 1);
-
-        array = null;
+                sum += array[(iteration + innerloop) % array_length];                
+        return sum;
     }
 
 
-    public void TestCustomMethod(int testNumber)
-    {
-        float minTime = 100, maxTime= 0, sum = 0;
+    public static void TestCustomMethod(int testNumber)
+    {        
 
         for (int i = 0; i<testNumber; i++){
-            var start = System.nanoTime();
-            for(int it=0; it< TestRepeat; it++){
-                CustomMethod();
-            }
+            var start = System.nanoTime();            
+            var result = CustomMethod();            
             var stop = System.nanoTime();
-            float elapsedTime = (stop - start) / 1000000;
-            if(elapsedTime < minTime)
-                minTime = elapsedTime;
-            if(elapsedTime > maxTime)
-                maxTime = elapsedTime;
-            sum += elapsedTime;
-
+            var elapsedTime = (stop - start) / 1000000.0;
+            if(result!=428714300)
+                    System.out.println("Wrong result!");
+            System.out.println("custom_java, " + elapsedTime);
         }
 
-        System.out.println("Custom method mean: " + sum/testNumber);
-        System.out.println("Custom method max: "+maxTime);
-        System.out.println("Custom method min:"+ minTime);
     }
 
-    public void testGauss(int testNumber){
-        float minTime = 100, maxTime= 0, sum = 0;
+    public static void testGauss(int testNumber){
         int[] values = {8,37, 26, 87, 13, 9, 18, 67, 99, 101, 33,
                 15, 77, 93, 13, 51, 16, 477, 501, 613, 718, 413,
                 18, 111, 135, 187, 15, 313, 314, 1001, 1120, 813, 1013,
@@ -162,126 +156,76 @@ public class Main {
                 60781, 7015, 3017, 9781, 24431, 31586, 8589, 13589, 45895, 84621, 5489,
                 51684, 12354, 12387, 64898, 13325, 14798, 15435, 87982, 14898, 36548, 51687,
                 15648, 235489, 546879, 564898, 302156, 486897, 38879, 68795, 13248, 65489, 16879};
-
         for (int test = 0; test<testNumber; test++){
+            float elapsedTime = 0;
 
-            var start = System.nanoTime();
-            for(int it = 0; it < 10000; it++)
-            {
-
+            for(int repetition = 0; repetition<5000; repetition++){
                 int n = 10;
-
-                // tworzymy macierze AB i X
-
                 var AB = new double [n][];
                 var X = new double[n];
 
-
                 for (var i = 0; i < n; i++) AB[i] = new double[n + 1];
-
-                // odczytujemy dane dla macierzy AB
                 int k = 0;
                 for (var i = 0; i < n; i++)
                     for (var j = 0; j <= n; j++) {
                         AB[i][j] = values[k];
                         k++;
                     }
-
-
+                var start = System.nanoTime();
                 var result = gauss(n, AB, X);
-
+                var stop = System.nanoTime();
+                if(!result) System.out.println("Wrong result!");
+                elapsedTime += (stop - start) / 1000000.0;
             }
-            var stop = System.nanoTime();
-            float elapsedTime = (stop - start) / 1000000;
-            if (elapsedTime < minTime)
-                minTime = elapsedTime;
-            if (elapsedTime > maxTime)
-                maxTime = elapsedTime;
-            sum += elapsedTime;
-
+            System.out.println("gauss_java, " + elapsedTime);
         }
-
-        System.out.println("Gauss mean: " + sum/testNumber);
-        System.out.println("Gauss max: "+maxTime);
-        System.out.println("Gauss min:"+ minTime);
-
     }
 
-    void TestAckerman(int testNumber){
-        float minTime = 100, maxTime= 0, sum = 0;
-
+    static void TestAckerman(int testNumber){
         for (int i = 0; i<testNumber; i++){
-            var start = System.nanoTime();
-            for(int it=0; it< TestRepeat; it++){
-                AckermanFunction(3,8);
-            }
+            var start = System.nanoTime();            
+            var result = AckermanFunction(3,10);            
             var stop = System.nanoTime();
-            float elapsedTime = (stop - start) / 1000000;
-            if(elapsedTime < minTime)
-                minTime = elapsedTime;
-            if(elapsedTime > maxTime)
-                maxTime = elapsedTime;
-            sum += elapsedTime;
-
+            var elapsedTime = (stop - start) / 1000000.0;
+            if(result != 8189)
+                System.out.println("Wrong result!");
+            System.out.println("ackerman_java, " + elapsedTime);
         }
-
-        System.out.println("Ackerman mean: " + sum/testNumber);
-        System.out.println("Ackerman max: "+maxTime);
-        System.out.println("Ackerman min:"+ minTime);
-
     }
 
-    void TestFibonacci(int testNumber){
-        float minTime = 100, maxTime= 0, sum = 0;
-
+  static   void TestFibonacci(int testNumber){
         for (int i = 0; i<testNumber; i++){
             var start = System.nanoTime();
-            for(int it=0; it< 100000; it++){
-                FibonacciSequence(70);
-            }
+            for (int it = 0; it < 90; it++)
+                {
+                    for (int j = -1; j < it * 100; j++)
+                        FibonacciSequence(it);
+                }               
             var stop  = System.nanoTime();
-            float elapsedTime = (stop - start) / 1000000;
-            if(elapsedTime < minTime)
-                minTime = elapsedTime;
-            if(elapsedTime > maxTime)
-                maxTime = elapsedTime;
-            sum += elapsedTime;
-
+            var elapsedTime = (stop - start) / 1000000.0;
+            System.out.println("fibonacci_java, " + elapsedTime);
         }
-
-        System.out.println("Fibonacci mean: " + sum/testNumber);
-        System.out.println("Fibonacci max: "+maxTime);
-        System.out.println("Fibonacci min:"+ minTime);
-
     }
 
-    void TestEratosthenes(int testNumber){
-        float minTime = 100, maxTime= 0, sum = 0;
-
+   static void TestEratosthenes(int testNumber){
         for (int i = 0; i<testNumber; i++){
-            var start = System.nanoTime();
-            for(int it=0; it< 10; it++){
-                sieveOfEratosthenes(1000000);
-            }
-
+            var start = System.nanoTime();            
+            var result = sieveOfEratosthenes(500000);
             var stop = System.nanoTime();
-            float elapsedTime = (stop - start) / 1000000;
-            if(elapsedTime < minTime)
-                minTime = elapsedTime;
-            if(elapsedTime > maxTime)
-                maxTime = elapsedTime;
-            sum += elapsedTime;
-
+            var elapsedTime = (stop - start) / 1000000.0;
+            if(result != 41538)
+                System.out.println("Wrong result!");
+            System.out.println("eratosthenes_java, " + elapsedTime);
         }
 
-        System.out.println("Eratosthenes mean: " + sum/testNumber);
-        System.out.println("Eratosthenes max: "+maxTime);
-        System.out.println("Eratosthenes min:"+ minTime);
 
     }
     public static void main(String[] args) {
-
-        CustomMethod();
-
+        
+        // TestAckerman(100);
+        TestEratosthenes(1);
+        // TestFibonacci(100);
+        // testGauss(100);
+        // TestCustomMethod(100);
     }
 }
